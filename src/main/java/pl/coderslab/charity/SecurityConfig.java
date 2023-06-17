@@ -16,8 +16,8 @@ public class SecurityConfig {
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/user/").authenticated()
-                .antMatchers("/admin/").hasRole("ADMIN")
+                .antMatchers("/donations/*", "/user/*").authenticated()
+                .antMatchers("/admin/*").hasRole("ADMIN")
                 .and().formLogin()
                 .loginPage("/login").defaultSuccessUrl("/")
                 .and().logout().logoutSuccessUrl("/")

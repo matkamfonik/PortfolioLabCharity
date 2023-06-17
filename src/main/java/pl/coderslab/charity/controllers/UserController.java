@@ -3,6 +3,7 @@ package pl.coderslab.charity.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,8 +25,12 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String createUser(@ModelAttribute(name = "user") @Valid User user){
+    public String createUser(@ModelAttribute(name = "user") @Valid User user, BindingResult result){
+        if (result.hasErrors()){
+            return "register";
+        }
         userService.saveUser(user);
+
         return "login";
     }
 }

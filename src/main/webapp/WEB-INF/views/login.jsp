@@ -3,7 +3,7 @@
 <%@include file="loginHeader.jsp" %>
 <section class="login-page">
 <h2>Zaloguj się</h2>
-<form method="post">
+<form method="post" action="/login">
     <div class="form-group">
         <input type="email" name="username" placeholder="Email" />
     </div>
