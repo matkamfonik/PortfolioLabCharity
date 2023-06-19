@@ -12,6 +12,14 @@
         <a href="#" class="btn btn--small btn--without-border reset-password">Resetuj hasło</a> <%-- TODO href --%>
     </div>
 
+    <div class="form-group form-group--checkbox">
+        <label>
+            <input type="checkbox" name="remember-me"/>
+            <span class="checkbox"></span>
+            <span class="description">Zapamiętaj mnie</span>
+        </label>
+    </div>
+
     <div class="form-group form-group--buttons">
         <a href="/register" class="btn btn--without-border">Załóż konto</a>
         <button class="btn" type="submit">Zaloguj się</button>
