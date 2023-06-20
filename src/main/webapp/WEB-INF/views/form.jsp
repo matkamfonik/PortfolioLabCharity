@@ -4,7 +4,7 @@
 <div class="slogan container container--90">
     <div class="slogan--item">
         <h1>
-            Oddaj rzeczy, których już nie chcesz<br />
+            Oddaj rzeczy, których już nie chcesz<br/>
             <span class="uppercase">potrzebującym</span>
         </h1>
 
@@ -60,13 +60,14 @@
 
                     <div class="form-group form-group--checkbox">
                         <label>
-                            <input type="checkbox" name="categoriesIds" value="${category.id}"/>
+                            <input type="checkbox" name="categoriesIds" value="${category.id}"
+                                   <c:if test="${donation.categoriesIds.contains(category.id)}">checked="checked"</c:if>/>
                             <span class="checkbox"></span>
                             <span class="description">${category.name}</span>
                         </label>
                     </div>
                 </c:forEach>
-                <form:errors path="categoriesIds"/>
+                <form:errors path="categoriesIds" cssClass="error"/>
                 <div class="form-group form-group--buttons">
                     <button type="button" class="btn next-step">Dalej</button>
                 </div>
@@ -79,10 +80,10 @@
                 <div class="form-group form-group--inline">
                     <label>
                         Liczba 60l worków:
-                        <input type="number" name="quantity" step="1" min="1"/>
+                        <input type="number" name="quantity" step="1" min="1" value="${donation.quantity}"/>
                     </label>
                 </div>
-                <form:errors path="quantity"/>
+                <form:errors path="quantity" cssClass="error"/>
 
                 <div class="form-group form-group--buttons">
                     <button type="button" class="btn prev-step">Wstecz</button>
@@ -97,7 +98,8 @@
                 <c:forEach var="institution" items="${institutions}">
                     <div class="form-group form-group--checkbox">
                         <label>
-                            <input type="radio" name="institutionId" value="${institution.id}"/>
+                            <input type="radio" name="institutionId" value="${institution.id}"
+                                   <c:if test="${institution.id==donation.institutionId}">checked="checked"</c:if>/>
                             <span class="checkbox radio"></span>
                             <span class="description">
                             <div class="title">Fundacja "${institution.name}"</div>
@@ -106,7 +108,7 @@
                         </label>
                     </div>
                 </c:forEach>
-                <form:errors path="institutionId"/>
+                <form:errors path="institutionId" cssClass="error"/>
 
                 <div class="form-group form-group--buttons">
                     <button type="button" class="btn prev-step">Wstecz</button>
@@ -126,19 +128,19 @@
                             <label for="street">Ulica</label>
 
                             <form:input path="street"/>
-                            <form:errors path="street"/>
+                            <form:errors path="street" cssClass="description"/>
                         </div>
 
                         <div class="form-group form-group--inline">
                             <label for="city">Miasto</label>
                             <form:input path="city"/>
-                            <form:errors path="city"/>
+                            <form:errors path="city" cssClass="description"/>
                         </div>
 
                         <div class="form-group form-group--inline">
                             <label for="zipCode">Kod pocztowy</label>
                             <form:input path="zipCode"/>
-                            <form:errors path="zipCode"/>
+                            <form:errors path="zipCode" cssClass="description"/>
                         </div>
 
                     </div>
@@ -148,20 +150,18 @@
                         <div class="form-group form-group--inline">
                             <label for="pickUpDate">Data</label>
                             <form:input type="date" path="pickUpDate"/>
-                            <form:errors path="pickUpDate"/>
+                            <form:errors path="pickUpDate" cssClass="description"/>
                         </div>
 
                         <div class="form-group form-group--inline">
                             <label for="pickUpTime">Godzina</label>
                             <form:input type="time" path="pickUpTime"/>
-                            <form:errors path="pickUpTime"/>
+                            <form:errors path="pickUpTime" cssClass="description"/>
                         </div>
 
                         <div class="form-group form-group--inline">
                             <label>Uwagi dla kuriera</label>
-                            <textarea form="donationForm" name="pickUpComment" rows="5">
-
-                            </textarea>
+                            <textarea form="donationForm" name="pickUpComment" rows="5">${donation.pickUpComment}</textarea>
                         </div>
                     </div>
                     <div class="form-group form-group--buttons">
@@ -222,6 +222,7 @@
                 <div class="form-group form-group--buttons">
                     <button type="button" class="btn prev-step">Wstecz</button>
                     <button type="submit" class="btn">Potwierdzam</button>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </div>
             </div>
         </form:form>

@@ -15,6 +15,7 @@ import java.util.Set;
 public class DonationDTO {
 
     @Min(value = 1)
+    @NotNull
     private Integer quantity;
 
     @Size(min = 1)
