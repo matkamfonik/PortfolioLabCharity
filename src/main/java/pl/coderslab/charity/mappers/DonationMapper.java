@@ -32,6 +32,7 @@ public class DonationMapper {
         donationDTO.setPickUpDate(donation.getPickUpDateTime().toLocalDate());
         donationDTO.setPickUpTime(donation.getPickUpDateTime().toLocalTime());
         donationDTO.setPickUpComment(donation.getPickUpComment());
+        donationDTO.setUserId(donation.getUser().getId());
         return donationDTO;
     }
 }

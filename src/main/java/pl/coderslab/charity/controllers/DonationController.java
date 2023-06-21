@@ -1,6 +1,7 @@
 package pl.coderslab.charity.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pl.coderslab.charity.dtos.CategoryDTO;
 import pl.coderslab.charity.dtos.DonationDTO;
 import pl.coderslab.charity.dtos.InstitutionDTO;
+import pl.coderslab.charity.entities.CurrentUser;
 import pl.coderslab.charity.entities.Donation;
 import pl.coderslab.charity.mappers.CategoryMapper;
 import pl.coderslab.charity.mappers.DonationMapper;
@@ -63,11 +65,13 @@ public class DonationController {
 
     @PostMapping("/new")
     public String add(@ModelAttribute(name = "donation") @Valid DonationDTO donationDTO,
-                      BindingResult result) {
+                      BindingResult result,
+                      @AuthenticationPrincipal CurrentUser currentUser) {
         if (result.hasErrors()) {
             return "form";
         }
         Donation donation = donationMapper.toEntity(donationDTO);
+        donation.setUser(currentUser.getUser());
         donation.setInstitution(institutionService.findById(donationDTO.getInstitutionId()).orElseThrow(EntityNotFoundException::new));
         donationDTO.getCategoriesIds().stream().map(categoryService::findById).forEach(c -> donation.getCategories().add(c.orElseThrow(EntityNotFoundException::new)));
         donationService.save(donation);

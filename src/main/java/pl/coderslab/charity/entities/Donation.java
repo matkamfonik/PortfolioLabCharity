@@ -49,4 +49,9 @@ public class Donation {
 
     private String pickUpComment;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @NotNull
+    private User user;
+
 }
