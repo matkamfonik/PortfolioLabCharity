@@ -42,4 +42,6 @@ public class DonationDTO {
 
     private String pickUpComment;
 
+    private Long userId;
+
 }
