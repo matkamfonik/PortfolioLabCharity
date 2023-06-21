@@ -8,19 +8,22 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
     @Bean
-    protected SecurityFilterChain configure(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
+    protected SecurityFilterChain configure(HttpSecurity http,
+                                            UserDetailsService userDetailsService,
+                                            AuthenticationSuccessHandler loginSuccessHandler) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/donations/*", "/user/*").authenticated()
-                .antMatchers("/admin/*").hasRole("ADMIN")
+                .antMatchers("/donations/*", "/users/*").authenticated()
+                .antMatchers("/admins/*").hasRole("ADMIN")
                 .and().formLogin()
-                .loginPage("/login").defaultSuccessUrl("/")
+                .loginPage("/login").successHandler(loginSuccessHandler)
                 .and().logout().logoutSuccessUrl("/")
                 .permitAll()
                 .and().exceptionHandling().accessDeniedPage("/403");
