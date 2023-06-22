@@ -2,6 +2,7 @@ package pl.coderslab.charity.mappers;
 
 import org.springframework.stereotype.Component;
 import pl.coderslab.charity.dtos.InstitutionDTO;
+import pl.coderslab.charity.entities.Category;
 import pl.coderslab.charity.entities.Institution;
 
 @Component
@@ -19,6 +20,10 @@ public class InstitutionMapper {
         institutionDTO.setId(institution.getId());
         institutionDTO.setName(institution.getName());
         institutionDTO.setDescription(institution.getDescription());
+        institution.getCategories()
+                .stream()
+                .map(Category::getId)
+                .forEach(ci -> institutionDTO.getCategoriesIds().add(ci));
         return institutionDTO;
     }
 }

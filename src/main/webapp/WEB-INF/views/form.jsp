@@ -96,8 +96,9 @@
             <div data-step="3">
                 <h3>Wybierz organizacje, której chcesz pomóc:</h3>
                 <c:forEach var="institution" items="${institutions}">
-                    <div class="form-group form-group--checkbox">
+                    <div class="form-group form-group--checkbox" id="institutions">
                         <label>
+                            <input type="hidden" value="${institution.categoriesIds}">
                             <input type="radio" name="institutionId" value="${institution.id}"
                                    <c:if test="${institution.id==donation.institutionId}">checked="checked"</c:if>/>
                             <span class="checkbox radio"></span>

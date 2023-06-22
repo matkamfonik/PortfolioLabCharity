@@ -195,9 +195,27 @@ document.addEventListener("DOMContentLoaded", function () {
             date[1].innerHTML = form.querySelector('input[name="pickUpTime"]').value;
             date[2].innerHTML = form.querySelector('textarea[name="pickUpComment"]').value;
 
+            const categoriesSelected = [];
+            form.querySelectorAll('input[name="categoriesIds"]').forEach(input => {
+                if (input.checked) {
+                    categoriesSelected.push(input.value);
+                }
+            })
+            institutions.forEach(institution =>{
+                let institutionCategories = institution.firstElementChild.firstElementChild.getAttribute("value");
+                let institutionCategoriesArray = institutionCategories.substring(1, institutionCategories.length-1).split(", ");
+                if (categoriesSelected.length > 0 && categoriesSelected.every(c => institutionCategoriesArray.includes(c))){
+                    institution.style.display = "block";
+                } else {
+                    institution.style.display = "none";
+                    institution.querySelector('input[name="institutionId"]').checked = false;
+                }
+            })
         }
 
     }
+    const institutions = document.querySelectorAll("#institutions")
+
     const date = document.querySelectorAll("#date li")
 
     const address = document.querySelectorAll("#address li");
