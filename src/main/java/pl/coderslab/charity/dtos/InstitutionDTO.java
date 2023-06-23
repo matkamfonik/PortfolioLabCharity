@@ -5,7 +5,9 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -22,4 +24,6 @@ public class InstitutionDTO {
 
     @Size(min = 1)
     private Set<Long> categoriesIds = new HashSet<>();
+
+    private List<String> categoriesNames = new ArrayList<>();
 }

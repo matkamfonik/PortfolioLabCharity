@@ -9,4 +9,8 @@ public interface InstitutionService {
     List<Institution> findAll();
 
     Optional<Institution> findById(Long id);
+
+    void delete(Long id);
+
+    void saveInstitution(Institution institution);
 }

@@ -24,4 +24,14 @@ public class InstitutionServiceImplementation implements InstitutionService {
     public Optional<Institution> findById(Long id) {
         return institutionRepository.findById(id);
     }
+
+    @Override
+    public void delete(Long id) {
+        institutionRepository.deleteById(id);
+    }
+
+    @Override
+    public void saveInstitution(Institution institution) {
+        institutionRepository.save(institution);
+    }
 }

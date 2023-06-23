@@ -7,15 +7,15 @@ import pl.coderslab.charity.entities.Institution;
 
 @Component
 public class InstitutionMapper {
-    public Institution toEntity(InstitutionDTO institutionDTO){
-        Institution  institution = new Institution();
+    public Institution toEntity(InstitutionDTO institutionDTO) {
+        Institution institution = new Institution();
         institution.setId(institutionDTO.getId());
         institution.setName(institutionDTO.getName());
         institution.setDescription(institutionDTO.getDescription());
         return institution;
     }
 
-    public InstitutionDTO toDto(Institution institution){
+    public InstitutionDTO toDto(Institution institution) {
         InstitutionDTO institutionDTO = new InstitutionDTO();
         institutionDTO.setId(institution.getId());
         institutionDTO.setName(institution.getName());
@@ -24,6 +24,10 @@ public class InstitutionMapper {
                 .stream()
                 .map(Category::getId)
                 .forEach(ci -> institutionDTO.getCategoriesIds().add(ci));
+        institution.getCategories()
+                .stream()
+                .map(Category::getName)
+                .forEach(cn -> institutionDTO.getCategoriesNames().add(cn));
         return institutionDTO;
     }
 }
