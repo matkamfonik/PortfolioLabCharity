@@ -11,15 +11,18 @@ import pl.coderslab.charity.repositories.RoleRepository;
 import pl.coderslab.charity.repositories.UserRepository;
 import pl.coderslab.charity.services.interfaces.UserService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Getter
 @Setter
 @RequiredArgsConstructor
 public class UserServiceImplementation implements UserService {
- 
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -28,12 +31,35 @@ public class UserServiceImplementation implements UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
     @Override
-    public void saveUser(User user) {
+    public void saveNewUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(1);
         Role userRole = roleRepository.findByName("ROLE_USER");
         user.setRoles(new HashSet<>(Arrays.asList(userRole)));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public void delete(Long id) {
+        User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        user.setEnabled(0);
         userRepository.save(user);
     }
 }

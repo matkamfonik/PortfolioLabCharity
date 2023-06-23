@@ -24,6 +24,7 @@ public class SecurityConfig {
                 .antMatchers("/admins/*").hasRole("ADMIN")
                 .and().formLogin()
                 .loginPage("/login").successHandler(loginSuccessHandler)
+                .failureUrl("/login?error=true")
                 .and().logout().logoutSuccessUrl("/")
                 .permitAll()
                 .and().exceptionHandling().accessDeniedPage("/403");

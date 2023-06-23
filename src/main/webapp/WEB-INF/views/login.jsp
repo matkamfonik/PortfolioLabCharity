@@ -3,6 +3,12 @@
 <%@include file="loginHeader.jsp" %>
 <section class="login-page">
 <h2>Zaloguj się</h2>
+    <c:if test="${not empty param.error}">
+        <h3 style="color:red">
+            Nie udało się zalogować, Spróbuj ponownie.<br /> Powód: <c:out
+                value="${SPRING_SECURITY_LAST_EXCEPTION.message}" />.
+        </h3>
+    </c:if>
 <form method="post" action="/login">
     <div class="form-group">
         <input type="email" name="username" placeholder="Email" />
