@@ -106,15 +106,21 @@ public class UserController {
         return "admins/users";
     }
 
+    @GetMapping("admins/users/{id}/disable")
+    public String banUser(@PathVariable(name = "id") Long id) {
+        userService.disable(id);
+        return "admins/adminPanel";
+    }
+
     @GetMapping("admins/users/{id}/delete")
     public String deleteUser(@PathVariable(name = "id") Long id) {
         userService.delete(id);
-        return "admins/admin";
+        return "admins/adminPanel";
     }
 
     @GetMapping("admins/admin")
     public String showAdmin() {
 
-        return "admins/admin";
+        return "admins/adminPanel";
     }
 }

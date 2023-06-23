@@ -47,6 +47,10 @@
                                             class="fas fa-edit fa-2x text-gray-300"></i> </a>
                                 </div>
                                 <div class="col-auto">
+                                    <a href="/admins/users/${user.id}/disable"> <i
+                                            class="fas fa-ban fa-2x text-gray-300"></i> </a>
+                                </div>
+                                <div class="col-auto">
                                     <a href="/admins/users/${user.id}/delete"> <i
                                             class="fas fa-dumpster fa-2x text-gray-300"></i> </a>
                                 </div>

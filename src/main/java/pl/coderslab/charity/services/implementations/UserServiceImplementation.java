@@ -57,9 +57,14 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void disable(Long id) {
         User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         user.setEnabled(0);
         userRepository.save(user);
+    }
+
+    @Override
+    public void delete(Long id) {
+        userRepository.deleteById(id);
     }
 }
