@@ -42,13 +42,17 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public void saveUser(User user) {
+    public void saveNewAdmin(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(1);
+        Role userRole = roleRepository.findByName("ROLE_ADMIN");
+        user.setRoles(new HashSet<>(Arrays.asList(userRole)));
         userRepository.save(user);
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public void saveUser(User user) {
+        userRepository.save(user);
     }
 
     @Override
@@ -66,5 +70,10 @@ public class UserServiceImplementation implements UserService {
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public List<User> findAllByRole(Role role) {
+        return userRepository.findAllByRole(role);
     }
 }

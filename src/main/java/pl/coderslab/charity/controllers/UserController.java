@@ -37,10 +37,17 @@ public class UserController {
 
     @ModelAttribute("users")
     public List<UserDTO> users() {
-        return userService.findAll().stream().map(userMapper::toDTO).toList();
+        Role roleUser = roleService.findByName("ROLE_USER");
+        return userService.findAllByRole(roleUser).stream().map(userMapper::toDTO).toList();
     }
 
-    @GetMapping("/register")
+    @ModelAttribute("admins")
+    public List<UserDTO> admins() {
+        Role roleAdmin = roleService.findByName("ROLE_ADMIN");
+        return userService.findAllByRole(roleAdmin).stream().map(userMapper::toDTO).toList();
+    }
+
+    @GetMapping({"/register", "/admins/register"})
     public String register(Model model) {
         UserDTO userDTO = new UserDTO();
         model.addAttribute("user", userDTO);
@@ -73,7 +80,7 @@ public class UserController {
         return "admins/users";
     }
 
-    @GetMapping("admins/users/{id}")
+    @GetMapping({"admins/users/{id}", "admins/{id}"})
     public String showUser(Model model,
                            @PathVariable(name = "id") Long id) {
         User user = userService.findById(id).orElseThrow(EntityNotFoundException::new);
@@ -82,7 +89,7 @@ public class UserController {
         return "admins/user";
     }
 
-    @GetMapping("admins/users/{id}/edit")
+    @GetMapping({"admins/users/{id}/edit", "admins/{id}/edit"})
     public String editUser(Model model,
                            @PathVariable(name = "id") Long id) {
         User user = userService.findById(id).orElseThrow(EntityNotFoundException::new);
@@ -91,7 +98,7 @@ public class UserController {
         return "admins/editUser";
     }
 
-    @PostMapping("admins/users/{id}/edit")
+    @PostMapping({"admins/users/{id}/edit", "admins/{id}/edit"})
     public String editUser(@ModelAttribute(name = "user") @Valid UserDTO userDTO,
                            BindingResult result) {
         if (result.hasErrors()) {
@@ -106,13 +113,13 @@ public class UserController {
         return "admins/users";
     }
 
-    @GetMapping("admins/users/{id}/disable")
+    @GetMapping({"admins/users/{id}/disable", "admins/{id}/disable"})
     public String banUser(@PathVariable(name = "id") Long id) {
         userService.disable(id);
         return "admins/adminPanel";
     }
 
-    @GetMapping("admins/users/{id}/delete")
+    @GetMapping({"admins/users/{id}/delete", "admins/{id}/delete"})
     public String deleteUser(@PathVariable(name = "id") Long id) {
         userService.delete(id);
         return "admins/adminPanel";
@@ -123,4 +130,25 @@ public class UserController {
 
         return "admins/adminPanel";
     }
+
+    @GetMapping("admins/all")
+    public String showAdmins() {
+
+        return "admins/admins";
+    }
+
+    @PostMapping("/admins/register")
+    public String createAdmin(@ModelAttribute(name = "user") @Valid UserDTO userDTO, BindingResult result) {
+        if (userService.findByEmail(userDTO.getEmail()) != null) {
+            result.rejectValue("email", "error.user", "Użytkownik o takim adresie email już istnieje");
+        }
+        if (result.hasErrors()) {
+            return "register";
+        }
+        User user = userMapper.toEntity(userDTO);
+        userService.saveNewAdmin(user);
+
+        return "login";
+    }
+
 }

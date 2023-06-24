@@ -74,7 +74,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Zarządzaj adminami:</h6>
                     <a class="collapse-item" href="/admins/all">Lista</a>
-                    <a class="collapse-item" href="/admins">Dodaj</a>
+                    <a class="collapse-item" href="/admins/register">Dodaj</a>
                 </div>
             </div>
         </li>
