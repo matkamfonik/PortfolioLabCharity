@@ -6,6 +6,7 @@ import pl.coderslab.charity.entities.Donation;
 import pl.coderslab.charity.repositories.DonationRepository;
 import pl.coderslab.charity.services.interfaces.DonationService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,19 +23,24 @@ public class DonationServiceImplementation implements DonationService {
     @Override
     public Integer sum() {
         Integer sum = donationRepository.sumDonations();
-        if (sum == null){
+        if (sum == null) {
             sum = 0;
         }
         return sum;
     }
 
     @Override
-    public Integer count(){
+    public Integer count() {
         return donationRepository.countAll();
     }
 
     @Override
     public void save(Donation donation) {
         donationRepository.save(donation);
+    }
+
+    @Override
+    public List<Donation> findAll() {
+        return donationRepository.findAll();
     }
 }

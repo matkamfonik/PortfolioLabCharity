@@ -54,4 +54,21 @@ public class Donation {
     @NotNull
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private Status status;
+
+    private LocalDateTime created;
+
+    private LocalDateTime received;
+
+    private LocalDateTime transferred;
+
+    @PrePersist
+    public void setCreated() {
+        this.created = LocalDateTime.now();
+
+    }
+
+
 }

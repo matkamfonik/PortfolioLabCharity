@@ -35,18 +35,6 @@ public class UserController {
         return roleService.findAll();
     }
 
-    @ModelAttribute("users")
-    public List<UserDTO> users() {
-        Role roleUser = roleService.findByName("ROLE_USER");
-        return userService.findAllByRole(roleUser).stream().map(userMapper::toDTO).toList();
-    }
-
-    @ModelAttribute("admins")
-    public List<UserDTO> admins() {
-        Role roleAdmin = roleService.findByName("ROLE_ADMIN");
-        return userService.findAllByRole(roleAdmin).stream().map(userMapper::toDTO).toList();
-    }
-
     @GetMapping({"/register", "/admins/register"})
     public String register(Model model) {
         UserDTO userDTO = new UserDTO();
@@ -75,8 +63,9 @@ public class UserController {
     }
 
     @GetMapping("admins/users/all")
-    public String showUsers() {
-
+    public String showUsers(Model model) {
+        Role roleUser = roleService.findByName("ROLE_USER");
+        model.addAttribute("users", userService.findAllByRole(roleUser).stream().map(userMapper::toDTO).toList());
         return "admins/users";
     }
 
@@ -110,13 +99,13 @@ public class UserController {
         user.setRoles(roles);
         userService.saveUser(user);
 
-        return "admins/users";
+        return "admins/adminPanel";
     }
 
     @GetMapping({"admins/users/{id}/disable", "admins/{id}/disable"})
     public String banUser(@PathVariable(name = "id") Long id) {
         userService.disable(id);
-        return "admins/adminPanel";
+        return "admins/adminPanel";     //when using @ModelAttribute in controller field it doesn't update
     }
 
     @GetMapping({"admins/users/{id}/delete", "admins/{id}/delete"})
@@ -132,8 +121,9 @@ public class UserController {
     }
 
     @GetMapping("admins/all")
-    public String showAdmins() {
-
+    public String showAdmins(Model model) {
+        Role roleAdmin = roleService.findByName("ROLE_ADMIN");
+        model.addAttribute("admins", userService.findAllByRole(roleAdmin).stream().map(userMapper::toDTO).toList());
         return "admins/admins";
     }
 
