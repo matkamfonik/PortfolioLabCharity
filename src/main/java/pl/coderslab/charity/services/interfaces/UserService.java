@@ -16,6 +16,8 @@ public interface UserService {
 
     void saveUser(User user);
 
+    void changePassword(User user);
+
     Optional<User> findById(Long id);
 
     void disable(Long id);

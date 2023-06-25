@@ -16,4 +16,6 @@ public interface DonationService {
     void save(Donation donation);
 
     List<Donation> findAll();
+
+    List<Donation> findAllByUserId(Long id);
 }

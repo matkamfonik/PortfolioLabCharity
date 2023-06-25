@@ -1,14 +1,13 @@
 package pl.coderslab.charity.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.coderslab.charity.dtos.UserDTO;
+import pl.coderslab.charity.entities.CurrentUser;
 import pl.coderslab.charity.entities.Role;
 import pl.coderslab.charity.entities.User;
 import pl.coderslab.charity.mappers.UserMapper;
@@ -16,6 +15,8 @@ import pl.coderslab.charity.services.interfaces.RoleService;
 import pl.coderslab.charity.services.interfaces.UserService;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +60,51 @@ public class UserController {
     @GetMapping("users/user")
     public String showUser() {
 
-        return "users/user";
+        return "users/userPanel";
+    }
+
+    @GetMapping("users/user/edit")
+    public String editCurrentUser(Model model,
+                                  @AuthenticationPrincipal CurrentUser currentUser) {
+        User user = currentUser.getUser();
+        UserDTO userDTO = userMapper.toDTO(user);
+        model.addAttribute("user", userDTO);
+        return "users/editUser";
+    }
+
+    @PostMapping("users/user/edit")
+    public String editCurrentUser(@ModelAttribute(name = "user") @Valid UserDTO userDTO,
+                                  BindingResult result,
+                                  @AuthenticationPrincipal CurrentUser currentUser) {
+        if (result.hasErrors()) {
+            return "users/editUser";
+        }
+        User user = currentUser.getUser();
+        user = userMapper.toEntity(userDTO, user);
+        userService.saveUser(user);
+        return "users/userPanel";
+    }
+
+    @GetMapping("users/user/change-password")
+    public String changePassword(Model model) {
+        model.addAttribute("password", "");
+        return "users/change-password";
+    }
+
+    @PostMapping("users/user/change-password")
+    public String changePassword(@ModelAttribute(name = "password") String pass,
+                                 @AuthenticationPrincipal CurrentUser currentUser) {
+        User user = currentUser.getUser();
+        user.setPassword(pass);
+        userService.changePassword(user);
+        return "users/userPanel";
+    }
+
+    @GetMapping("users/user/disable")
+    public String banUser(@AuthenticationPrincipal CurrentUser currentUser, HttpServletRequest httpServletRequest) throws ServletException {
+        userService.disable(currentUser.getUser().getId());
+        httpServletRequest.logout();
+        return "redirect:/";
     }
 
     @GetMapping("admins/users/all")
@@ -91,7 +136,7 @@ public class UserController {
     public String editUser(@ModelAttribute(name = "user") @Valid UserDTO userDTO,
                            BindingResult result) {
         if (result.hasErrors()) {
-            return "admins/users/" + userDTO.getId() + "/edit";
+            return "admins/editUser";
         }
         User user = userService.findById(userDTO.getId()).orElseThrow(EntityNotFoundException::new);
         user = userMapper.toEntity(userDTO, user);
@@ -105,7 +150,7 @@ public class UserController {
     @GetMapping({"admins/users/{id}/disable", "admins/{id}/disable"})
     public String banUser(@PathVariable(name = "id") Long id) {
         userService.disable(id);
-        return "admins/adminPanel";     //when using @ModelAttribute in controller field it doesn't update
+        return "admins/adminPanel";
     }
 
     @GetMapping({"admins/users/{id}/delete", "admins/{id}/delete"})

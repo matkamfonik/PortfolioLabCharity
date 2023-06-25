@@ -80,6 +80,15 @@ public class DonationController {
         return "form-confirmation";
     }
 
+    @GetMapping("users/donations/my")
+    public String myDonations(Model model,
+                              @AuthenticationPrincipal CurrentUser currentUser) {
+        List<Donation> donations = donationService.findAllByUserId(currentUser.getUser().getId());
+        List<DonationDTO> donationDTOS = donations.stream().map(donationMapper::toDto).toList();
+        model.addAttribute("donations", donationDTOS);
+        return "users/donations";
+    }
+
     @GetMapping("admins/donations/all")
     public String showAll(Model model) {
         List<Donation> donations = donationService.findAll();

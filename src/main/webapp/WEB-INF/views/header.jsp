@@ -28,7 +28,7 @@
                     </form>
                     <ul class="dropdown">
                         <li><a href="/users/user">Profil</a></li>
-                        <li><a href="#">Moje zbiórki</a></li>
+                        <li><a href="/users/donations/my">Moje zbiórki</a></li>
                         <sec:authorize access="hasRole('ADMIN')">
                             <li><a href="/admins/admin">Panel admina</a></li>
                         </sec:authorize>

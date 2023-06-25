@@ -27,8 +27,8 @@
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     </form>
                     <ul class="dropdown">
-                        <li><a href="#">Profil</a></li>
-                        <li><a href="#">Moje zbiórki</a></li>
+                        <li><a href="/users/user">Profil</a></li>
+                        <li><a href="/users/donations/my">Moje zbiórki</a></li>
                         <li><a href="#" onclick="document.getElementById('loginForm').submit()">Wyloguj</a>
 
                         </li>

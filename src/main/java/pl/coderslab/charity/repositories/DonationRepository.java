@@ -20,4 +20,6 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
     @Query("SELECT d FROM Donation d ORDER BY d.status.id ASC, d.received ASC, d.created ASC")
     List<Donation> findAll();
 
+    @Query("SELECT d FROM Donation d WHERE d.user.id = :id ORDER BY d.status.id ASC, d.received ASC, d.created ASC")
+    List<Donation> findAllByUserId(Long id);
 }

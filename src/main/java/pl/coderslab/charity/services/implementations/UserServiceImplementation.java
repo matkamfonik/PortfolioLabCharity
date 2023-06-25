@@ -56,6 +56,12 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    public void changePassword(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+
+    @Override
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
