@@ -24,7 +24,7 @@
         <div class="col-xl-10 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
-                    <form:form modelAttribute="password" method="post">
+                    <form method="post">
 
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
@@ -33,6 +33,7 @@
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800"><input type="password"
                                                                                            name="password"/></div>
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-signature fa-2x text-gray-300"></i>
@@ -42,7 +43,7 @@
                         <button type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-recycle fa-sm text-white-50"></i> Zapisz
                         </button>
-                    </form:form>
+                    </form>
                 </div>
             </div>
         </div>

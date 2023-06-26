@@ -36,19 +36,15 @@ public class InstitutionController {
 
     private final CategoryMapper categoryMapper;
 
-    @ModelAttribute("institutions")
-    public List<InstitutionDTO> institutions() {
-        return institutionService.findAll().stream().map(institutionMapper::toDto).toList();
-    }
-
     @ModelAttribute("categories")
     public List<CategoryDTO> categories() {
         return categoryService.findAll().stream().map(categoryMapper::toDto).toList();
     }
 
     @GetMapping("admins/institutions/all")
-    public String showInstitutions() {
-
+    public String showInstitutions(Model model) {
+        List<InstitutionDTO> institutionDTOS = institutionService.findAll().stream().map(institutionMapper::toDto).toList();
+        model.addAttribute("institutions", institutionDTOS);
         return "admins/institutions";
     }
 
@@ -64,7 +60,7 @@ public class InstitutionController {
     @GetMapping("admins/institutions/{id}/delete")
     public String deleteInstitution(@PathVariable(name = "id") Long id) {
         institutionService.delete(id);
-        return "admins/adminPanel";
+        return "redirect:/admins/institutions/all";
     }
 
     @GetMapping("admins/institutions/{id}/edit")
@@ -87,7 +83,7 @@ public class InstitutionController {
         institution.setCategories(categories);
         institutionService.saveInstitution(institution);
 
-        return "admins/institutions";
+        return "redirect:/admins/institutions/all";
     }
 
     @GetMapping("admins/institutions")
@@ -108,7 +104,7 @@ public class InstitutionController {
         institution.setCategories(categories);
         institutionService.saveInstitution(institution);
 
-        return "admins/institutions";
+        return "redirect:/admins/institutions/all";
     }
 
 }

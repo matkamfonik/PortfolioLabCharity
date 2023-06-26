@@ -86,13 +86,12 @@ public class UserController {
     }
 
     @GetMapping("users/user/change-password")
-    public String changePassword(Model model) {
-        model.addAttribute("password", "");
+    public String changePassword() {
         return "users/change-password";
     }
 
     @PostMapping("users/user/change-password")
-    public String changePassword(@ModelAttribute(name = "password") String pass,
+    public String changePassword(@RequestParam(name = "password") String pass,
                                  @AuthenticationPrincipal CurrentUser currentUser) {
         User user = currentUser.getUser();
         user.setPassword(pass);
@@ -143,20 +142,40 @@ public class UserController {
         Set<Role> roles = userDTO.getRolesNames().stream().map(roleService::findByName).collect(Collectors.toSet());
         user.setRoles(roles);
         userService.saveUser(user);
+        String usersListAddress = "";
+        if (roles.contains(roleService.findByName("ROLE_ADMIN"))) {
+            usersListAddress = "/admins/all";
+        } else {
+            usersListAddress = "/admins/users/all";
+        }
 
-        return "admins/adminPanel";
+        return "redirect:" + usersListAddress;
     }
 
     @GetMapping({"admins/users/{id}/disable", "admins/{id}/disable"})
     public String banUser(@PathVariable(name = "id") Long id) {
         userService.disable(id);
-        return "admins/adminPanel";
+        Set<Role> roles = userService.findById(id).get().getRoles();
+        String usersListAddress = "";
+        if (roles.contains(roleService.findByName("ROLE_ADMIN"))) {
+            usersListAddress = "/admins/all";
+        } else {
+            usersListAddress = "/admins/users/all";
+        }
+        return "redirect:" + usersListAddress;
     }
 
     @GetMapping({"admins/users/{id}/delete", "admins/{id}/delete"})
     public String deleteUser(@PathVariable(name = "id") Long id) {
+        Set<Role> roles = userService.findById(id).get().getRoles();
         userService.delete(id);
-        return "admins/adminPanel";
+        String usersListAddress = "";
+        if (roles.contains(roleService.findByName("ROLE_ADMIN"))) {
+            usersListAddress = "/admins/all";
+        } else {
+            usersListAddress = "/admins/users/all";
+        }
+        return "redirect:" + usersListAddress;
     }
 
     @GetMapping("admins/admin")

@@ -104,10 +104,7 @@ public class DonationController {
         donation.setReceived(LocalDateTime.now());
         donation.setStatus(statusService.findById(2L).get());
         donationService.save(donation);
-        List<Donation> donations = donationService.findAll();
-        List<DonationDTO> donationDTOS = donations.stream().map(donationMapper::toDto).toList();
-        model.addAttribute("donations", donationDTOS);
-        return "admins/donations";
+        return "redirect:/admins/donations/all";
     }
 
     @GetMapping("admins/donations/{id}/set-transferred")
@@ -117,9 +114,6 @@ public class DonationController {
         donation.setTransferred(LocalDateTime.now());
         donation.setStatus(statusService.findById(3L).get());
         donationService.save(donation);
-        List<Donation> donations = donationService.findAll();
-        List<DonationDTO> donationDTOS = donations.stream().map(donationMapper::toDto).toList();
-        model.addAttribute("donations", donationDTOS);
-        return "admins/donations";
+        return "redirect:/admins/donations/all";
     }
 }
